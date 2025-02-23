@@ -39,10 +39,162 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         child: Column(
-          children: [SizedBox(height: 50), MyAppBar()],
+          children: [
+            SizedBox(height: 60),
+            MyAppBar(),
+            SizedBox(height: 30),
+            Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                AnalyzWidget(),
+                SizedBox(
+                  width: 20,
+                ),
+                AllMenus(),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Button()
+          ],
         ),
       ),
     );
+  }
+}
+
+class AllMenus extends StatelessWidget {
+  const AllMenus({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: 175,
+          height: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.white,
+                Colors.green.shade200,
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(3, 6),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              "Задачи на сегодня",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Container(
+          width: 175,
+          height: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.white,
+                Colors.green.shade200,
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(3, 6),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              "Все задачи",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Container(
+          width: 175,
+          height: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.white,
+                Colors.green.shade200,
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(3, 6),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              "Выполнено",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class AnalyzWidget extends StatelessWidget {
+  const AnalyzWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        // Отступ сверху (например, для статус-бара)
+        width: 180,
+        height: 420,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.white, // Верхняя часть белая
+              Colors.green.shade200, // Плавный переход в зелёный
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10,
+              offset: Offset(3, 6),
+            ),
+          ],
+        ));
   }
 }
 
@@ -163,5 +315,34 @@ class MyAppBar extends StatelessWidget {
             ),
           ),
         ]));
+  }
+}
+
+class Button extends StatelessWidget {
+  const Button({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: 380,
+        height: 70,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.white, // Верхняя часть белая
+              Colors.green.shade200, // Плавный переход в зелёный
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10,
+              offset: Offset(3, 6),
+            ),
+          ],
+        ));
   }
 }

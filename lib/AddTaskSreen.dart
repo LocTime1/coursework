@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:coursework/widgets/ChooseDateWidget.dart';
+import 'package:coursework/widgets/AddTaskScreenWidget/ChooseDateWidget.dart';
+import 'package:coursework/widgets/AddTaskScreenWidget/ColorButton.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'widgets/AddTaskScreenWidget/AddTaskName.dart';
+import 'widgets/AddTaskScreenWidget/MonthScrollWidget.dart';
+import 'widgets/AddTaskScreenWidget/MyTimeWidget.dart';
 
 class AddTaskScreen extends StatefulWidget {
   @override
@@ -10,6 +13,10 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
+  DateTime? _selectedDate = DateTime.now();
+  Color? _selectedColor;
+  final TextEditingController _taskNameController = TextEditingController();
+  TimeOfDay? _selectedTime;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,196 +66,135 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   right: 0,
                   child: SizedBox(height: 80, child: MonthScrollWidget())),
               Positioned(
-                  top: 340, left: 0, right: 0, child: ChooseDatesWidget()),
+                  top: 340,
+                  left: 0,
+                  right: 0,
+                  child: ChooseDatesWidget(
+                    selectedDate: _selectedDate, // Передаём текущую дату
+                    onDateSelected: (date) {
+                      setState(() {
+                        _selectedDate =
+                            date; // Теперь обновляем дату в родителе
+                      });
+                    },
+                  )),
               Positioned(
                   top: 460,
                   left: 20,
                   child: Text("Task Name",
                       style: TextStyle(
                           fontSize: 27, fontWeight: FontWeight.bold))),
-              Positioned(top: 510, left: 20, right: 20, child: AddTaskName()),
-              Positioned(top: 580, left: 20, child: MyTimeWidget())
+              Positioned(
+                  top: 510,
+                  left: 20,
+                  right: 20,
+                  child: AddTaskName(
+                    controller: _taskNameController,
+                  )),
+              Positioned(
+                  top: 580,
+                  left: 20,
+                  child: MyTimeWidget(
+                    selectedTime: _selectedTime, // Передаём текущую дату
+                    onTimeSelected: (time) {
+                      setState(() {
+                        _selectedTime =
+                            time; // Теперь обновляем дату в родителе
+                      });
+                    },
+                  )),
+              Positioned(
+                top: 680,
+                left: 20,
+                child: Text("Color",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 27)),
+              ),
+              Positioned(
+                  top: 720,
+                  left: 20,
+                  child: ColorPickerDemo(
+                    selectedColor: _selectedColor, // Передаём текущую дату
+                    onColorSelected: (color) {
+                      setState(() {
+                        _selectedColor =
+                            color; // Теперь обновляем дату в родителе
+                      });
+                    },
+                  )),
+              Positioned(
+                  top: 780,
+                  right: 30,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (_taskNameController.text.isEmpty ||
+                          _selectedDate == null ||
+                          _selectedTime == null ||
+                          _selectedColor == null) {
+                        _showTopMessage(context,
+                            "Not all fields are filled in"); // Вывод ошибки
+                      } else {
+                        print("Название: ${_taskNameController.text}");
+                        print("Дата: $_selectedDate");
+                        print("Дедлайн: $_selectedTime");
+                        print("Цвет: $_selectedColor");
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Container(
+                      height: 80,
+                      width: 130,
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(89, 95, 255, 1),
+                          borderRadius: BorderRadius.circular(25)),
+                      child: Center(
+                        child: Text(
+                          "Add",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ))
             ]),
           ),
         ));
   }
-}
 
-// АААА
-class MyTimeWidget extends StatefulWidget {
-  const MyTimeWidget({super.key});
-
-  @override
-  State<MyTimeWidget> createState() => _MyTimeWidgetState();
-}
-
-class _MyTimeWidgetState extends State<MyTimeWidget> {
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Deadline",
-            style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold)),
-        Form(
-            key: _formKey,
-            child: SizedBox(
-              width: 150,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Time",
-                  hintStyle:
-                      TextStyle(fontWeight: FontWeight.bold), // Жирный текст
-                  filled: true,
-                  fillColor: Color.fromRGBO(242, 242, 242, 1), // Светлый фон
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(20), // Закругленные углы
-                    borderSide: BorderSide.none, // Без рамки
-                  ),
-                  isDense: true,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      Icons.access_time,
-                      size: 30,
-                    ), // Иконка часов
-
-                    onPressed: () async {
-                      TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime:
-                            TimeOfDay.now(), // Начальное время — текущее
-                      );
-
-                      if (pickedTime != null) {
-                        print("Выбранное время: ${pickedTime.format(context)}");
-                        // Здесь можно обновить состояние и отобразить выбранное время в поле
-                      }
-                      ; // Здесь можно добавить диалог выбора времени
-                    },
-                  ), // Иконка часов
-                ),
-              ),
-            ))
-      ],
-    );
-  }
-}
-
-class AddTaskName extends StatefulWidget {
-  const AddTaskName({super.key});
-
-  @override
-  State<AddTaskName> createState() => _AddTaskNameState();
-}
-
-class _AddTaskNameState extends State<AddTaskName> {
-  final _formKey = GlobalKey<FormState>();
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: TextFormField(
-          decoration: InputDecoration(
-            hintText: "Task name",
-            hintStyle: TextStyle(fontWeight: FontWeight.bold), // Жирный текст
-            filled: true,
-            fillColor: Color.fromRGBO(242, 242, 242, 1), // Светлый фон
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20), // Закругленные углы
-              borderSide: BorderSide.none, // Без рамки
+  void _showTopMessage(BuildContext context, String message) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 50, // Отступ сверху
+        left: MediaQuery.of(context).size.width * 0.1,
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(228, 123, 105, 1), // Цвет ошибки
+              borderRadius: BorderRadius.circular(10),
             ),
-            isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+            child: Center(
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
           ),
-        ));
-  }
-}
-
-class MonthScrollWidget extends StatefulWidget {
-  @override
-  _MonthScrollWidgetState createState() => _MonthScrollWidgetState();
-}
-
-class _MonthScrollWidgetState extends State<MonthScrollWidget> {
-  late ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-
-    List<String> months = _getMonths();
-
-    int todayIndex =
-        months.indexWhere((mon) => mon == DateFormat('MMM yyyy').format(now));
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        double offset =
-            todayIndex * 150.0 - MediaQuery.of(context).size.width / 2 + 75.0;
-        _scrollController.animateTo(offset,
-            duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-      }
-    });
-
-    return SingleChildScrollView(
-      controller: _scrollController,
-      scrollDirection: Axis.horizontal, // Горизонтальная прокрутка
-      child: Row(
-        children: months.map((month) => _buildContainer(month, now)).toList(),
-      ),
-    );
-  }
-
-  Widget _buildContainer(String month, DateTime currentDate) {
-    bool isMonthNow = DateFormat('MMM yyyy').format(currentDate) == month;
-    return Container(
-      width: 100,
-      height: 130,
-      margin: EdgeInsets.symmetric(horizontal: 25),
-      // decoration: BoxDecoration(
-      //   color: Colors.blueAccent,
-      //   borderRadius: BorderRadius.circular(10),
-      // ),
-      child: Center(
-        child: Text(
-          month,
-          style: TextStyle(
-              fontSize: 22,
-              color: isMonthNow ? Colors.black : Colors.grey,
-              fontWeight: FontWeight.bold),
         ),
       ),
     );
-  }
 
-  List<String> _getMonths() {
-    List<String> months = [];
-    DateTime now = DateTime.now();
-    for (int i = -12; i <= 12; i++) {
-      DateTime month = DateTime(now.year, now.month + i);
-      String formattedMonth =
-          DateFormat('MMM yyyy').format(month); // Месяц с годом
-      months.add(formattedMonth);
-    }
-    return months;
+    overlay.insert(overlayEntry);
+
+    // Удаление сообщения через 2 секунды
+    Future.delayed(Duration(seconds: 2), () {
+      overlayEntry.remove();
+    });
   }
 }
 

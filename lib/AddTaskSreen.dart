@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:coursework/widgets/ChooseDateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -12,44 +13,159 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: [
-      // Фон
-      Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Color.fromRGBO(64, 67, 201, 1),
-      ),
-      Positioned(
-        top: MediaQuery.of(context).size.height * 0.28,
-        left: 0,
-        right: 0,
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height * 0.72,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
+        resizeToAvoidBottomInset: true,
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
             ),
+            child: Stack(children: [
+              // Фон
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height, // Исправлено
+                color: Color.fromRGBO(64, 67, 201, 1),
+              ),
+              Positioned(
+                top: MediaQuery.of(context).size.height * 0.28,
+                left: 0,
+                right: 0,
+                child: Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.72,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(top: 60, left: 15, child: BackButton()),
+              Positioned(
+                  top: 145,
+                  left: 25,
+                  child: Text(
+                    "Add Task",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold),
+                  )),
+              Positioned(
+                  top: 270,
+                  left: 0,
+                  right: 0,
+                  child: SizedBox(height: 80, child: MonthScrollWidget())),
+              Positioned(
+                  top: 340, left: 0, right: 0, child: ChooseDatesWidget()),
+              Positioned(
+                  top: 460,
+                  left: 20,
+                  child: Text("Task Name",
+                      style: TextStyle(
+                          fontSize: 27, fontWeight: FontWeight.bold))),
+              Positioned(top: 510, left: 20, right: 20, child: AddTaskName()),
+              Positioned(top: 580, left: 20, child: MyTimeWidget())
+            ]),
           ),
-        ),
-      ),
-      Positioned(top: 60, left: 15, child: BackButton()),
-      Positioned(
-          top: 145,
-          left: 25,
-          child: Text(
-            "Add Task",
-            style: TextStyle(
-                color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),
-          )),
-      Positioned(
-          top: 270,
-          left: 0,
-          right: 0,
-          child: SizedBox(height: 80, child: MonthScrollWidget()))
-    ]));
+        ));
+  }
+}
+
+class MyTimeWidget extends StatefulWidget {
+  const MyTimeWidget({super.key});
+
+  @override
+  State<MyTimeWidget> createState() => _MyTimeWidgetState();
+}
+
+class _MyTimeWidgetState extends State<MyTimeWidget> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Deadline",
+            style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold)),
+        Form(
+            key: _formKey,
+            child: SizedBox(
+              width: 150,
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: "Time",
+                  hintStyle:
+                      TextStyle(fontWeight: FontWeight.bold), // Жирный текст
+                  filled: true,
+                  fillColor: Color.fromRGBO(242, 242, 242, 1), // Светлый фон
+                  border: OutlineInputBorder(
+                    borderRadius:
+                        BorderRadius.circular(20), // Закругленные углы
+                    borderSide: BorderSide.none, // Без рамки
+                  ),
+                  isDense: true,
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.access_time,
+                      size: 30,
+                    ), // Иконка часов
+
+                    onPressed: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime:
+                            TimeOfDay.now(), // Начальное время — текущее
+                      );
+
+                      if (pickedTime != null) {
+                        print("Выбранное время: ${pickedTime.format(context)}");
+                        // Здесь можно обновить состояние и отобразить выбранное время в поле
+                      }
+                      ; // Здесь можно добавить диалог выбора времени
+                    },
+                  ), // Иконка часов
+                ),
+              ),
+            ))
+      ],
+    );
+  }
+}
+
+class AddTaskName extends StatefulWidget {
+  const AddTaskName({super.key});
+
+  @override
+  State<AddTaskName> createState() => _AddTaskNameState();
+}
+
+class _AddTaskNameState extends State<AddTaskName> {
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: _formKey,
+        child: TextFormField(
+          decoration: InputDecoration(
+            hintText: "Task name",
+            hintStyle: TextStyle(fontWeight: FontWeight.bold), // Жирный текст
+            filled: true,
+            fillColor: Color.fromRGBO(242, 242, 242, 1), // Светлый фон
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20), // Закругленные углы
+              borderSide: BorderSide.none, // Без рамки
+            ),
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+          ),
+        ));
   }
 }
 

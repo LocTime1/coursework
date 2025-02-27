@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:coursework/database.dart';
 import 'package:coursework/widgets/AddTaskScreenWidget/ChooseDateWidget.dart';
 import 'package:coursework/widgets/AddTaskScreenWidget/ColorButton.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,9 @@ import 'widgets/AddTaskScreenWidget/MonthScrollWidget.dart';
 import 'widgets/AddTaskScreenWidget/MyTimeWidget.dart';
 
 class AddTaskScreen extends StatefulWidget {
+  final VoidCallback refreshTasks;
+
+  AddTaskScreen({required this.refreshTasks});
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }
@@ -17,6 +21,19 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   Color? _selectedColor;
   final TextEditingController _taskNameController = TextEditingController();
   TimeOfDay? _selectedTime;
+  void _saveTask() async {
+    await MyDatabase().insertTask({
+      'title': _taskNameController.text,
+      'date': _selectedDate!.toIso8601String(),
+      'deadline': _selectedTime!.format(context),
+      'color': _selectedColor!.value,
+      'completed': 0,
+    });
+    print("Задача сохранена в БД!");
+    widget.refreshTasks();
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +155,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         print("Дата: $_selectedDate");
                         print("Дедлайн: $_selectedTime");
                         print("Цвет: $_selectedColor");
-                        Navigator.pop(context);
+                        _saveTask();
                       }
                     },
                     child: Container(

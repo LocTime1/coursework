@@ -1,16 +1,24 @@
-# coursework
+# 📋 Курсовая работа: Программа для управления задачами и напоминаниями. (Ежедневник)
 
-A new Flutter project.
+## 🔹 Описание  
+Данное приложение — это ежедневник, который помогает пользователям планировать свой день, добавлять, удалять и отслеживать выполнение задач, а также создавать заметки и напоминания.  
 
-## Getting Started
+## 🎯 Сделанные функции  
+- 📝 Добавление задач с заголовком, датой и дедлайном  
+- 🎨 Назначение цвета для каждой задачи  
+- ✅ Отметка выполненных задач  
+- 🗑 Удаление задач  
+- 📅 Отображение задач в удобном интерфейсе  
 
-This project is a starting point for a Flutter application.
+## 📌 Скриншоты приложения
 
-A few resources to get you started if this is your first Flutter project:
+### 🖼 Главный экран
+![Главный экран](![image](https://github.com/user-attachments/assets/02b385f1-3f51-4189-9a61-9ed3065398bc)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 📝 Добавление задачи
+![Экран добавления задачи](![image](https://github.com/user-attachments/assets/75a08bbb-d5ac-4294-9e50-fbfe6e7a3b88)
+
+## 🎥 Видео-демонстрация проекта  
+[Смотреть видео на Яндекс.Диске](https://disk.yandex.ru/d/vXThL3Gm18xy8g)
+

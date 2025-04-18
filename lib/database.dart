@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -21,7 +23,7 @@ class MyDatabase {
 
     return await openDatabase(
       path,
-      version: 3, // Увеличиваем версию БД!
+      version: 3,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE tasks(
@@ -53,11 +55,11 @@ class MyDatabase {
     return await db.query('tasks');
   }
 
-  Future<int> updateTaskCompletion(int id, bool isCompleted) async {
+  Future<int> updateTaskCompletion(int id, int isCompleted) async {
     final db = await database;
     return await db.update(
       'tasks',
-      {'isCompleted': isCompleted ? 1 : 0},
+      {'isCompleted': isCompleted},
       where: 'id = ?',
       whereArgs: [id],
     );

@@ -1,7 +1,9 @@
+// ignore_for_file: file_names, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class AddTaskName extends StatefulWidget {
-  final TextEditingController controller; // Передаём контроллер
+  final TextEditingController controller;
 
   AddTaskName({required this.controller});
 
@@ -20,12 +22,12 @@ class _AddTaskNameState extends State<AddTaskName> {
           controller: widget.controller,
           decoration: InputDecoration(
             hintText: "Task name",
-            hintStyle: TextStyle(fontWeight: FontWeight.bold), // Жирный текст
+            hintStyle: TextStyle(fontWeight: FontWeight.bold),
             filled: true,
-            fillColor: Color.fromRGBO(242, 242, 242, 1), // Светлый фон
+            fillColor: Color.fromRGBO(242, 242, 242, 1),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20), // Закругленные углы
-              borderSide: BorderSide.none, // Без рамки
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide.none,
             ),
             isDense: true,
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),

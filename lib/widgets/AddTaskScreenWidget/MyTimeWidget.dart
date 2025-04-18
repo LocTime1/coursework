@@ -1,8 +1,10 @@
+// ignore_for_file: file_names, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class MyTimeWidget extends StatefulWidget {
   final Function(TimeOfDay) onTimeSelected;
-  final TimeOfDay? selectedTime; // Добавили параметр
+  final TimeOfDay? selectedTime;
 
   MyTimeWidget({required this.onTimeSelected, required this.selectedTime});
 
@@ -37,14 +39,12 @@ class _MyTimeWidgetState extends State<MyTimeWidget> {
                   hintText: selectedTime != null
                       ? selectedTime!.format(context)
                       : "Time",
-                  hintStyle:
-                      TextStyle(fontWeight: FontWeight.bold), // Жирный текст
+                  hintStyle: TextStyle(fontWeight: FontWeight.bold),
                   filled: true,
-                  fillColor: Color.fromRGBO(242, 242, 242, 1), // Светлый фон
+                  fillColor: Color.fromRGBO(242, 242, 242, 1),
                   border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(20), // Закругленные углы
-                    borderSide: BorderSide.none, // Без рамки
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
                   ),
                   isDense: true,
                   contentPadding:
@@ -53,13 +53,11 @@ class _MyTimeWidgetState extends State<MyTimeWidget> {
                     icon: Icon(
                       Icons.access_time,
                       size: 30,
-                    ), // Иконка часов
-
+                    ),
                     onPressed: () async {
                       TimeOfDay? picked = await showTimePicker(
                         context: context,
-                        initialTime: selectedTime ??
-                            TimeOfDay.now(), // Начальное время — текущее
+                        initialTime: selectedTime ?? TimeOfDay.now(),
                       );
 
                       if (picked != null) {
@@ -67,11 +65,9 @@ class _MyTimeWidgetState extends State<MyTimeWidget> {
                           selectedTime = picked;
                         });
                         widget.onTimeSelected(selectedTime!);
-                        // Здесь можно обновить состояние и отобразить выбранное время в поле
                       }
-                      ; // Здесь можно добавить диалог выбора времени
                     },
-                  ), // Иконка часов
+                  ),
                 ),
               ),
             ))

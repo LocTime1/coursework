@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_super_parameters, library_private_types_in_public_api, prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 
 class ColorPickerButton extends StatefulWidget {
@@ -22,15 +24,13 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        width: 40, // Размер круга
+        width: 40,
         height: 40,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: widget.color, // Основной цвет кнопки
+          color: widget.color,
           border: widget.isSelected
-              ? Border.all(
-                  color: Color.fromRGBO(64, 67, 201, 1),
-                  width: 5) // Голубая рамка
+              ? Border.all(color: Color.fromRGBO(64, 67, 201, 1), width: 5)
               : null,
         ),
       ),
@@ -39,7 +39,7 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
 }
 
 class ColorPickerDemo extends StatefulWidget {
-  Color? selectedColor;
+  final Color? selectedColor;
   final Function(Color) onColorSelected;
   ColorPickerDemo({required this.selectedColor, required this.onColorSelected});
   @override
@@ -47,12 +47,19 @@ class ColorPickerDemo extends StatefulWidget {
 }
 
 class _ColorPickerDemoState extends State<ColorPickerDemo> {
+  late Color? _selectedColor;
   final List<Color> colors = [
     Color.fromRGBO(166, 152, 237, 1),
     Color.fromRGBO(127, 188, 249, 1),
     Color.fromRGBO(128, 200, 194, 1),
     Color.fromRGBO(235, 171, 159, 1),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedColor = widget.selectedColor;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +70,10 @@ class _ColorPickerDemoState extends State<ColorPickerDemo> {
           padding: const EdgeInsets.all(8.0),
           child: ColorPickerButton(
             color: color,
-            isSelected: widget.selectedColor == color,
+            isSelected: _selectedColor == color,
             onTap: () {
               setState(() {
-                widget.selectedColor = color;
+                _selectedColor = color;
               });
               widget.onColorSelected(color);
             },

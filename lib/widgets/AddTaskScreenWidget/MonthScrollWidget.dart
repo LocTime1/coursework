@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_key_in_widget_constructors, library_private_types_in_public_api, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -41,7 +43,7 @@ class _MonthScrollWidgetState extends State<MonthScrollWidget> {
 
     return SingleChildScrollView(
       controller: _scrollController,
-      scrollDirection: Axis.horizontal, // Горизонтальная прокрутка
+      scrollDirection: Axis.horizontal,
       child: Row(
         children: months.map((month) => _buildContainer(month, now)).toList(),
       ),
@@ -54,10 +56,6 @@ class _MonthScrollWidgetState extends State<MonthScrollWidget> {
       width: 100,
       height: 130,
       margin: EdgeInsets.symmetric(horizontal: 25),
-      // decoration: BoxDecoration(
-      //   color: Colors.blueAccent,
-      //   borderRadius: BorderRadius.circular(10),
-      // ),
       child: Center(
         child: Text(
           month,
@@ -75,8 +73,7 @@ class _MonthScrollWidgetState extends State<MonthScrollWidget> {
     DateTime now = DateTime.now();
     for (int i = -12; i <= 12; i++) {
       DateTime month = DateTime(now.year, now.month + i);
-      String formattedMonth =
-          DateFormat('MMM yyyy').format(month); // Месяц с годом
+      String formattedMonth = DateFormat('MMM yyyy').format(month);
       months.add(formattedMonth);
     }
     return months;

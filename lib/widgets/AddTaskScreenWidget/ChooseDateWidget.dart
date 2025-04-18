@@ -1,11 +1,11 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, file_names, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ChooseDatesWidget extends StatefulWidget {
   final Function(DateTime) onDateSelected;
-  final DateTime? selectedDate; // Добавили параметр
+  final DateTime? selectedDate;
 
   ChooseDatesWidget({required this.onDateSelected, required this.selectedDate});
 
@@ -75,9 +75,9 @@ class _ChooseDatesWidgetState extends State<ChooseDatesWidget> {
     return GestureDetector(
         onTap: () {
           setState(() {
-            selectedDate = date; // Обновляем выбранную дату
+            selectedDate = date;
           });
-          widget.onDateSelected(date); // Передаём в родителя
+          widget.onDateSelected(date);
         },
         child: Container(
           width: 70,

@@ -1,12 +1,15 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, library_private_types_in_public_api, file_names, use_build_context_synchronously
 
-import 'package:coursework/database.dart';
-import 'package:coursework/widgets/AddTaskScreenWidget/ChooseDateWidget.dart';
-import 'package:coursework/widgets/AddTaskScreenWidget/ColorButton.dart';
+import 'dart:developer';
+
+import 'database.dart';
+import 'widgets/AddTaskScreenWidget/ChooseDateWidget.dart';
+import 'widgets/AddTaskScreenWidget/ColorButton.dart';
 import 'package:flutter/material.dart';
 import 'widgets/AddTaskScreenWidget/AddTaskName.dart';
 import 'widgets/AddTaskScreenWidget/MonthScrollWidget.dart';
 import 'widgets/AddTaskScreenWidget/MyTimeWidget.dart';
+import 'widgets/AddTaskScreenWidget/backButtonWidget.dart';
 
 class AddTaskScreen extends StatefulWidget {
   final VoidCallback refreshTasks;
@@ -29,7 +32,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       'color': _selectedColor!.value,
       'completed': 0,
     });
-    print("Задача сохранена в БД!");
     widget.refreshTasks();
     Navigator.pop(context);
   }
@@ -44,10 +46,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               minHeight: MediaQuery.of(context).size.height,
             ),
             child: Stack(children: [
-              // Фон
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height, // Исправлено
+                height: MediaQuery.of(context).size.height,
                 color: Color.fromRGBO(64, 67, 201, 1),
               ),
               Positioned(
@@ -66,7 +67,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ),
                 ),
               ),
-              Positioned(top: 60, left: 15, child: BackButton()),
+              Positioned(top: 60, left: 15, child: MyBackButton()),
               Positioned(
                   top: 145,
                   left: 25,
@@ -87,11 +88,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   left: 0,
                   right: 0,
                   child: ChooseDatesWidget(
-                    selectedDate: _selectedDate, // Передаём текущую дату
+                    selectedDate: _selectedDate,
                     onDateSelected: (date) {
                       setState(() {
-                        _selectedDate =
-                            date; // Теперь обновляем дату в родителе
+                        _selectedDate = date;
                       });
                     },
                   )),
@@ -112,11 +112,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   top: 580,
                   left: 20,
                   child: MyTimeWidget(
-                    selectedTime: _selectedTime, // Передаём текущую дату
+                    selectedTime: _selectedTime,
                     onTimeSelected: (time) {
                       setState(() {
-                        _selectedTime =
-                            time; // Теперь обновляем дату в родителе
+                        _selectedTime = time;
                       });
                     },
                   )),
@@ -131,11 +130,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   top: 720,
                   left: 20,
                   child: ColorPickerDemo(
-                    selectedColor: _selectedColor, // Передаём текущую дату
+                    selectedColor: _selectedColor,
                     onColorSelected: (color) {
                       setState(() {
-                        _selectedColor =
-                            color; // Теперь обновляем дату в родителе
+                        _selectedColor = color;
                       });
                     },
                   )),
@@ -148,13 +146,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           _selectedDate == null ||
                           _selectedTime == null ||
                           _selectedColor == null) {
-                        _showTopMessage(context,
-                            "Not all fields are filled in"); // Вывод ошибки
+                        _showTopMessage(
+                            context, "Not all fields are filled in");
                       } else {
-                        print("Название: ${_taskNameController.text}");
-                        print("Дата: $_selectedDate");
-                        print("Дедлайн: $_selectedTime");
-                        print("Цвет: $_selectedColor");
+                        log("Название: ${_taskNameController.text}");
+                        log("Дата: $_selectedDate");
+                        log("Дедлайн: $_selectedTime");
+                        log("Цвет: $_selectedColor");
                         _saveTask();
                       }
                     },
@@ -192,7 +190,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             decoration: BoxDecoration(
-              color: Color.fromRGBO(228, 123, 105, 1), // Цвет ошибки
+              color: Color.fromRGBO(228, 123, 105, 1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -208,32 +206,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
     overlay.insert(overlayEntry);
 
-    // Удаление сообщения через 2 секунды
     Future.delayed(Duration(seconds: 2), () {
       overlayEntry.remove();
     });
-  }
-}
-
-class BackButton extends StatelessWidget {
-  const BackButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Container(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(15)),
-        child: Icon(
-          Icons.arrow_back_ios_new,
-          color: Color.fromRGBO(64, 67, 201, 1),
-        ),
-      ),
-    );
   }
 }

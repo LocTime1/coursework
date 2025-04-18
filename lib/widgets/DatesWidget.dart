@@ -4,7 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DatesWidget extends StatefulWidget {
-  const DatesWidget({super.key});
+  final DateTime? initialDate;
+  final Function(DateTime) onDateSelected;
+
+  const DatesWidget({
+    super.key,
+    this.initialDate,
+    required this.onDateSelected,
+  });
 
   @override
   _DatesWidgetState createState() => _DatesWidgetState();
@@ -12,11 +19,13 @@ class DatesWidget extends StatefulWidget {
 
 class _DatesWidgetState extends State<DatesWidget> {
   late ScrollController _scrollController;
+  late DateTime selectedDate;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    selectedDate = widget.initialDate ?? DateTime.now();
   }
 
   @override
@@ -31,9 +40,9 @@ class _DatesWidgetState extends State<DatesWidget> {
     List<DateTime> dates = _getDates(now);
 
     int todayIndex = dates.indexWhere((date) =>
-        date.year == now.year &&
-        date.month == now.month &&
-        date.day == now.day);
+        date.year == selectedDate.year &&
+        date.month == selectedDate.month &&
+        date.day == selectedDate.day);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
@@ -49,7 +58,7 @@ class _DatesWidgetState extends State<DatesWidget> {
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: dates.map((date) => _buildContainer(date, now)).toList(),
+        children: dates.map((date) => _buildContainer(date)).toList(),
       ),
     );
   }
@@ -62,37 +71,47 @@ class _DatesWidgetState extends State<DatesWidget> {
     return dates;
   }
 
-  Widget _buildContainer(DateTime date, DateTime currentDate) {
-    bool isToday = date.year == currentDate.year &&
-        date.month == currentDate.month &&
-        date.day == currentDate.day;
+  Widget _buildContainer(DateTime date) {
+    bool isSelected = date.year == selectedDate.year &&
+        date.month == selectedDate.month &&
+        date.day == selectedDate.day;
 
-    return Container(
-      width: 70,
-      height: 100,
-      margin: EdgeInsets.symmetric(horizontal: 7),
-      decoration: BoxDecoration(
-        color: isToday ? Colors.white : Color.fromRGBO(89, 95, 255, 1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            DateFormat('E').format(date).toUpperCase(),
-            style: TextStyle(
-              color: isToday ? Color.fromRGBO(89, 95, 255, 1) : Colors.white,
-              fontSize: 14,
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedDate = date;
+        });
+        widget.onDateSelected(date);
+      },
+      child: Container(
+        width: 70,
+        height: 100,
+        margin: EdgeInsets.symmetric(horizontal: 7),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white : Color.fromRGBO(89, 95, 255, 1),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              DateFormat('E').format(date).toUpperCase(),
+              style: TextStyle(
+                color:
+                    isSelected ? Color.fromRGBO(89, 95, 255, 1) : Colors.white,
+                fontSize: 14,
+              ),
             ),
-          ),
-          Text(
-            DateFormat('d').format(date),
-            style: TextStyle(
-              color: isToday ? Color.fromRGBO(89, 95, 255, 1) : Colors.white,
-              fontSize: 18,
+            Text(
+              DateFormat('d').format(date),
+              style: TextStyle(
+                color:
+                    isSelected ? Color.fromRGBO(89, 95, 255, 1) : Colors.white,
+                fontSize: 18,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

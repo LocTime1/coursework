@@ -27,6 +27,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DateTime _selectedDate = DateTime.now();
   final GlobalKey<TasksWidgetState> _tasksWidgetKey = GlobalKey();
   void _refreshTasks() {
     _tasksWidgetKey.currentState?.loadTasks();
@@ -40,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Фон
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -73,8 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialPageRoute(
                           builder: (context) =>
                               AddTaskScreen(refreshTasks: _refreshTasks)),
-                    );
-                    _refreshTasks();
+                    ).then((_) {
+                      _refreshTasks(); // ✅ вызывается только после возврата с AddTaskScreen
+                    });
                   },
                   child: AddButton())),
           Positioned(
@@ -89,7 +90,15 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 0,
             child: SizedBox(
               height: 80,
-              child: DatesWidget(),
+              child: DatesWidget(
+                initialDate: _selectedDate,
+                onDateSelected: (date) {
+                  setState(() {
+                    _selectedDate = date;
+                  });
+                  // можешь передать дату в TasksWidget или отфильтровать задачи тут
+                },
+              ),
             ),
           ),
           Positioned(
@@ -101,7 +110,8 @@ class _HomeScreenState extends State<HomeScreen> {
               top: MediaQuery.of(context).size.height * 0.33,
               left: 10,
               right: 10,
-              child: TasksWidget(key: _tasksWidgetKey))
+              child: TasksWidget(
+                  key: _tasksWidgetKey, selectedDate: _selectedDate))
         ],
       ),
     );

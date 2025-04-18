@@ -6,7 +6,9 @@ import 'package:coursework/database.dart';
 import 'package:flutter/material.dart';
 
 class TasksWidget extends StatefulWidget {
-  const TasksWidget({Key? key}) : super(key: key);
+  final DateTime selectedDate;
+
+  const TasksWidget({Key? key, required this.selectedDate}) : super(key: key);
 
   @override
   TasksWidgetState createState() => TasksWidgetState();
@@ -16,11 +18,37 @@ class TasksWidgetState extends State<TasksWidget> {
   List<Map<String, dynamic>> tasks = [];
 
   void loadTasks() async {
+    log("Вызван loadTasks()");
     final data = await MyDatabase().getTasks();
-    log("Задания загружены");
+    log("Все задачи:");
+    for (var task in data) {
+      log("ID: ${task['id']} — ${task['title']} — ${task['date']}");
+    }
+
+    final filtered = data.where((task) {
+      final taskDateStr = task['date'];
+      if (taskDateStr == null) return false;
+
+      final taskDate = DateTime.tryParse(taskDateStr);
+      if (taskDate == null) return false;
+
+      return taskDate.year == widget.selectedDate.year &&
+          taskDate.month == widget.selectedDate.month &&
+          taskDate.day == widget.selectedDate.day;
+    }).toList();
+
     setState(() {
-      tasks = data;
+      tasks = filtered;
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant TasksWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.selectedDate != widget.selectedDate) {
+      loadTasks();
+    }
   }
 
   @override

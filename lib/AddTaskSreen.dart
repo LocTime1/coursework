@@ -32,7 +32,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       'color': _selectedColor!.value,
       'completed': 0,
     });
-    widget.refreshTasks();
     Navigator.pop(context);
   }
 

@@ -71,8 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              AddTaskScreen(refreshTasks: _refreshTasks)),
+                          builder: (context) => AddTaskScreen(
+                                refreshTasks: _refreshTasks,
+                                selectedDate: _selectedDate,
+                              )),
                     ).then((_) {
                       _refreshTasks();
                     });
@@ -105,7 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
               left: 10,
               right: 10,
               child: TasksWidget(
-                  key: _tasksWidgetKey, selectedDate: _selectedDate)),
+                key: _tasksWidgetKey,
+                selectedDate: _selectedDate,
+                refreshTasks: _refreshTasks,
+              )),
         ],
       ),
     );

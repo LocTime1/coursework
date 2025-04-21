@@ -13,21 +13,28 @@ import 'widgets/AddTaskScreenWidget/backButtonWidget.dart';
 
 class AddTaskScreen extends StatefulWidget {
   final VoidCallback refreshTasks;
+  final DateTime selectedDate;
 
-  AddTaskScreen({required this.refreshTasks});
+  AddTaskScreen({required this.refreshTasks, required this.selectedDate});
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  DateTime? _selectedDate = DateTime.now();
+  DateTime? selectedDate;
   Color? _selectedColor;
   final TextEditingController _taskNameController = TextEditingController();
   TimeOfDay? _selectedTime;
+  @override
+  void initState() {
+    selectedDate = widget.selectedDate;
+    super.initState();
+  }
+
   void _saveTask() async {
     await MyDatabase().insertTask({
       'title': _taskNameController.text,
-      'date': _selectedDate!.toIso8601String(),
+      'date': selectedDate!.toIso8601String(),
       'deadline': _selectedTime!.format(context),
       'color': _selectedColor!.value,
       'completed': 0,
@@ -87,10 +94,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   left: 0,
                   right: 0,
                   child: ChooseDatesWidget(
-                    selectedDate: _selectedDate,
+                    selectedDate: selectedDate,
                     onDateSelected: (date) {
                       setState(() {
-                        _selectedDate = date;
+                        selectedDate = date;
                       });
                     },
                   )),
@@ -142,14 +149,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   child: GestureDetector(
                     onTap: () {
                       if (_taskNameController.text.isEmpty ||
-                          _selectedDate == null ||
+                          selectedDate == null ||
                           _selectedTime == null ||
                           _selectedColor == null) {
                         _showTopMessage(
                             context, "Not all fields are filled in");
                       } else {
                         log("Название: ${_taskNameController.text}");
-                        log("Дата: $_selectedDate");
+                        log("Дата: $selectedDate");
                         log("Дедлайн: $_selectedTime");
                         log("Цвет: $_selectedColor");
                         _saveTask();

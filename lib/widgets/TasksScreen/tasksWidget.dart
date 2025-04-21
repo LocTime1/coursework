@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:coursework/addTaskSreen.dart';
 import 'package:coursework/database.dart';
 import 'package:flutter/material.dart';
@@ -355,9 +356,17 @@ class _TaskTileState extends State<TaskTile> {
                   SizedBox(
                     height: 15,
                   ),
-                  Text(
-                    "${task['title']}",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  SizedBox(
+                    height: 35,
+                    width: 290,
+                    child: AutoSizeText(
+                      task['title'],
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      maxLines: 2,
+                      minFontSize: 12,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   SizedBox(
                     height: 5,

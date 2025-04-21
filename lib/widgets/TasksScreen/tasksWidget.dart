@@ -4,6 +4,8 @@ import 'dart:developer';
 
 import 'package:coursework/database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 class TasksWidget extends StatefulWidget {
   final DateTime selectedDate;
@@ -18,13 +20,11 @@ class TasksWidgetState extends State<TasksWidget> {
   List<Map<String, dynamic>> tasks = [];
 
   void loadTasks() async {
-    log("Вызван loadTasks()");
     final data = await MyDatabase().getTasks();
     log("Все задачи:");
     for (var task in data) {
       log("ID: ${task['id']} — ${task['title']} — ${task['date']}");
     }
-
     final filtered = data.where((task) {
       final taskDateStr = task['date'];
       if (taskDateStr == null) return false;
@@ -59,146 +59,178 @@ class TasksWidgetState extends State<TasksWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.72,
-      child: ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (context, index) {
-          final task = tasks[index];
+    if (tasks.isEmpty) {
+      return Container(
+        padding: EdgeInsets.only(top: 100),
+        height: 500,
+        width: MediaQuery.of(context).size.width,
+        child: Column(children: [
+          Text(
+            "All tasks are done!",
+            style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+          ),
+          Lottie.asset("assets/animations/empty_animation.json", height: 200)
+        ]),
+      );
+    }
+    DateTime today = DateTime.now();
+    bool isToday = today.year == widget.selectedDate.year &&
+        today.month == widget.selectedDate.month &&
+        today.day == widget.selectedDate.day;
 
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 15),
+          child: Text(
+              isToday
+                  ? "Today's tasks:"
+                  : "Tasks for ${DateFormat('MMMM d').format(widget.selectedDate)}:",
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+        ),
+        Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height * 0.72,
+          child: ListView.builder(
+            itemCount: tasks.length,
+            itemBuilder: (context, index) {
+              final task = tasks[index];
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () async {
-                      int newStatus = task["isCompleted"] == 1 ? 0 : 1;
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          int newStatus = task["isCompleted"] == 1 ? 0 : 1;
+                          await MyDatabase()
+                              .updateTaskCompletion(task['id'], newStatus);
 
-                      await MyDatabase()
-                          .updateTaskCompletion(task['id'], newStatus);
-
-                      loadTasks();
-                    },
-                    child: task["isCompleted"] == 1
-                        ? Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: Color(task['color']),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(Icons.check,
-                                color: Colors.white, size: 23),
-                          )
-                        : Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Color(task['color']),
-                                width: 7,
+                          loadTasks();
+                        },
+                        child: task["isCompleted"] == 1
+                            ? Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: Color(task['color']),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(Icons.check,
+                                    color: Colors.white, size: 23),
+                              )
+                            : Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Color(task['color']),
+                                    width: 7,
+                                  ),
+                                ),
                               ),
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Container(
+                        width: 2,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            left: BorderSide(
+                              width: 2,
+                              style: BorderStyle.none,
                             ),
                           ),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Container(
-                    width: 2,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        left: BorderSide(
-                          width: 2,
-                          style: BorderStyle.none,
+                        ),
+                        child: CustomPaint(
+                          painter: DashedLinePainter(color: task['color']),
                         ),
                       ),
-                    ),
-                    child: CustomPaint(
-                      painter: DashedLinePainter(color: task['color']),
-                    ),
+                      SizedBox(
+                        height: 15,
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: 15,
-                  )
-                ],
-              ),
-              Container(
-                width: 315,
-                height: 145,
-                decoration: BoxDecoration(
-                    color: Color(task['color']).withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(25)),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Container(
+                    width: 315,
+                    height: 145,
+                    decoration: BoxDecoration(
+                        color: Color(task['color']).withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(25)),
+                    child: Row(
                       children: [
                         SizedBox(
-                          height: 15,
+                          width: 20,
                         ),
-                        Text(
-                          "${task['deadline']}",
-                          style: TextStyle(
-                              color: Color.fromRGBO(75, 76, 90, 1),
-                              fontSize: 17),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              "${task['deadline']}",
+                              style: TextStyle(
+                                  color: Color.fromRGBO(75, 76, 90, 1),
+                                  fontSize: 17),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              "${task['title']}",
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              width: 270,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  GestureDetector(
+                                      onTap: () async {
+                                        await MyDatabase()
+                                            .deleteTask(task['id']);
+                                        loadTasks();
+                                      },
+                                      child: Container(
+                                          height: 40,
+                                          width: 70,
+                                          decoration: BoxDecoration(
+                                              color: Color(task['color']),
+                                              borderRadius:
+                                                  BorderRadius.circular(35)),
+                                          child: Center(
+                                            child: Text(
+                                              "Delete",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          )))
+                                ],
+                              ),
+                            )
+                          ],
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          "${task['title']}",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          width: 270,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              GestureDetector(
-                                  onTap: () async {
-                                    await MyDatabase().deleteTask(task['id']);
-                                    loadTasks();
-                                  },
-                                  child: Container(
-                                      height: 40,
-                                      width: 70,
-                                      decoration: BoxDecoration(
-                                          color: Color(task['color']),
-                                          borderRadius:
-                                              BorderRadius.circular(35)),
-                                      child: Center(
-                                        child: Text(
-                                          "Delete",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      )))
-                            ],
-                          ),
-                        )
                       ],
                     ),
-                  ],
-                ),
-              )
-            ],
-          );
-        },
-      ),
+                  )
+                ],
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

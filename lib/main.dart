@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context) =>
                               AddTaskScreen(refreshTasks: _refreshTasks)),
                     ).then((_) {
-                      _refreshTasks(); // ✅ вызывается только после возврата с AddTaskScreen
+                      _refreshTasks();
                     });
                   },
                   child: AddButton())),
@@ -96,22 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   setState(() {
                     _selectedDate = date;
                   });
-                  // можешь передать дату в TasksWidget или отфильтровать задачи тут
                 },
               ),
             ),
           ),
           Positioned(
-              top: MediaQuery.of(context).size.height * 0.32,
-              left: 15,
-              child: Text("Today's task",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold))),
-          Positioned(
               top: MediaQuery.of(context).size.height * 0.33,
               left: 10,
               right: 10,
               child: TasksWidget(
-                  key: _tasksWidgetKey, selectedDate: _selectedDate))
+                  key: _tasksWidgetKey, selectedDate: _selectedDate)),
         ],
       ),
     );

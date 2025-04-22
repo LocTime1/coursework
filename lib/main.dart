@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, library_private_types_in_public_api
+import 'package:coursework/widgets/TasksScreen/anotherDatesWidget.dart';
+
 import 'addTaskSreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +24,8 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
+  final DateTime? isAnotherDate;
+  HomeScreen({this.isAnotherDate});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -92,14 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 0,
             child: SizedBox(
               height: 80,
-              child: DatesWidget(
-                initialDate: _selectedDate,
-                onDateSelected: (date) {
-                  setState(() {
-                    _selectedDate = date;
-                  });
-                },
-              ),
+              child: widget.isAnotherDate == null
+                  ? DatesWidget(
+                      initialDate: _selectedDate,
+                      onDateSelected: (date) {
+                        setState(() {
+                          _selectedDate = date;
+                        });
+                      },
+                    )
+                  : AnotherDateswidget(date: widget.isAnotherDate!),
             ),
           ),
           Positioned(

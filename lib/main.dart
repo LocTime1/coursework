@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, library_private_types_in_public_api
+
 import 'package:coursework/widgets/TasksScreen/anotherDatesWidget.dart';
 
 import 'addTaskSreen.dart';
@@ -66,7 +67,26 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Positioned(top: 45, left: 6, child: MenuButton()),
+          Positioned(
+            top: 45,
+            left: 6,
+            child: Builder(
+              builder: (context) => Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    child: const MenuButton(),
+                  ),
+                ),
+              ),
+            ),
+          ),
           Positioned(
               top: 55,
               right: 13,
@@ -118,6 +138,53 @@ class _HomeScreenState extends State<HomeScreen> {
                 refreshTasks: _refreshTasks,
               )),
         ],
+      ),
+      drawer: SizedBox(
+        width: 70,
+        child: Drawer(
+          child: Container(
+            color: Color(0xFF4043C9),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                SizedBox(
+                  height: 70,
+                ),
+                _buildDrawerItem(Icons.task, isSelected: true),
+                _buildDrawerItem(
+                  Icons.alarm,
+                ),
+                _buildDrawerItem(
+                  Icons.bar_chart,
+                ),
+                _buildDrawerItem(
+                  Icons.settings,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDrawerItem(IconData icon, {bool isSelected = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color:
+              isSelected ? Colors.white.withOpacity(0.15) : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: IconButton(
+          onPressed: () {},
+          icon: Icon(
+            icon,
+            size: 30,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

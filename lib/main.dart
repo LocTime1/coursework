@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, library_private_types_in_public_api
 
+import 'package:coursework/notesScreen.dart';
 import 'package:coursework/widgets/TasksScreen/anotherDatesWidget.dart';
 
 import 'addTaskSreen.dart';
@@ -150,16 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   height: 70,
                 ),
-                _buildDrawerItem(Icons.task, isSelected: true),
-                _buildDrawerItem(
-                  Icons.alarm,
-                ),
-                _buildDrawerItem(
-                  Icons.bar_chart,
-                ),
-                _buildDrawerItem(
-                  Icons.settings,
-                ),
+                _buildDrawerItem(Icons.task, 1, isSelected: true),
+                _buildDrawerItem(Icons.alarm, 2),
+                _buildDrawerItem(Icons.bar_chart, 3),
+                _buildDrawerItem(Icons.settings, 4),
               ],
             ),
           ),
@@ -168,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildDrawerItem(IconData icon, {bool isSelected = false}) {
+  Widget _buildDrawerItem(IconData icon, int ind, {bool isSelected = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Container(
@@ -178,7 +173,14 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            if (ind == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotesScreen()),
+              );
+            }
+          },
           icon: Icon(
             icon,
             size: 30,

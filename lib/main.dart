@@ -2,6 +2,7 @@
 
 import 'package:coursework/notesScreen.dart';
 import 'package:coursework/widgets/TasksScreen/anotherDatesWidget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'addTaskSreen.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +19,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
-    );
+    return ScreenUtilInit(
+        designSize: Size(411.4, 890.3),
+        builder: (context, child) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: HomeScreen(),
+            ));
   }
 }
 
@@ -44,6 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime now = DateTime.now();
     int year = now.year;
     String monthName = DateFormat('MMMM').format(now);
+    print(MediaQuery.of(context).size);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -53,35 +58,35 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Color.fromRGBO(64, 67, 201, 1),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.28,
+            top: 250.h,
             left: 0,
             right: 0,
             child: Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.72,
+              height: 641.h,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
+                  topLeft: Radius.circular(40.r),
+                  topRight: Radius.circular(40.r),
                 ),
               ),
             ),
           ),
           Positioned(
-            top: 45,
-            left: 6,
+            top: 45.h,
+            left: 6.w,
             child: Builder(
               builder: (context) => Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   onTap: () {
                     Scaffold.of(context).openDrawer();
                   },
                   child: Container(
-                    width: 60,
-                    height: 60,
+                    width: 60.h,
+                    height: 60.w,
                     child: const MenuButton(),
                   ),
                 ),
@@ -89,8 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-              top: 55,
-              right: 13,
+              top: 55.h,
+              right: 13.w,
               child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -106,17 +111,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: AddButton())),
           Positioned(
-            top: 110,
-            left: 15,
+            top: 110.h,
+            left: 15.w,
             child: Text("$monthName, $year",
-                style: TextStyle(color: Colors.white, fontSize: 22)),
+                style: TextStyle(color: Colors.white, fontSize: 22.sp)),
           ),
           Positioned(
-            top: 150,
+            top: 150.h,
             left: 0,
             right: 0,
             child: SizedBox(
-              height: 80,
+              height: 80.h,
               child: widget.isAnotherDate == null
                   ? DatesWidget(
                       initialDate: _selectedDate,
@@ -130,9 +135,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Positioned(
-              top: MediaQuery.of(context).size.height * 0.33,
-              left: 10,
-              right: 10,
+              top: 280.h,
+              left: 10.w,
+              right: 10.w,
               child: TasksWidget(
                 key: _tasksWidgetKey,
                 selectedDate: _selectedDate,
@@ -141,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       drawer: SizedBox(
-        width: 70,
+        width: 70.h,
         child: Drawer(
           child: Container(
             color: Color(0xFF4043C9),
@@ -149,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.zero,
               children: [
                 SizedBox(
-                  height: 70,
+                  height: 70.h,
                 ),
                 _buildDrawerItem(Icons.task, 1, isSelected: true),
                 _buildDrawerItem(Icons.alarm, 2),
@@ -165,12 +170,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildDrawerItem(IconData icon, int ind, {bool isSelected = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: EdgeInsets.symmetric(vertical: 6.h),
       child: Container(
         decoration: BoxDecoration(
           color:
               isSelected ? Colors.white.withOpacity(0.15) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: IconButton(
           onPressed: () {
@@ -183,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           icon: Icon(
             icon,
-            size: 30,
+            size: 30.sp,
             color: Colors.white,
           ),
         ),

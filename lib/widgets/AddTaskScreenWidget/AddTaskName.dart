@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddTaskName extends StatefulWidget {
   final TextEditingController controller;
@@ -26,11 +27,12 @@ class _AddTaskNameState extends State<AddTaskName> {
             filled: true,
             fillColor: Color.fromRGBO(242, 242, 242, 1),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
               borderSide: BorderSide.none,
             ),
             isDense: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
           ),
         ));
   }

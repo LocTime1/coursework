@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MenuButton extends StatelessWidget {
   const MenuButton({super.key});
@@ -8,25 +9,25 @@ class MenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 60,
-        height: 80,
+        width: 60.w,
+        height: 80.h,
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Positioned(top: 18, left: 15, child: _line()),
-            Positioned(top: 28, child: _line(longer: true)),
-            Positioned(top: 38, right: 15, child: _line()),
+            Positioned(top: 18.h, left: 15.w, child: _line()),
+            Positioned(top: 28.h, child: _line(longer: true)),
+            Positioned(top: 38.h, right: 15.w, child: _line()),
           ],
         ));
   }
 
   Widget _line({bool longer = false}) {
     return Container(
-      width: longer ? 25 : 13,
-      height: 4,
+      width: longer ? 25.w : 13.w,
+      height: 4.h,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(2.r),
       ),
     );
   }

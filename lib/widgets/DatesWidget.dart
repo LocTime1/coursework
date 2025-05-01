@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:coursework/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DatesWidget extends StatefulWidget {
   final DateTime? initialDate;
@@ -51,7 +52,7 @@ class _DatesWidgetState extends State<DatesWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         double offset =
-            todayIndex * 86.0 - MediaQuery.of(context).size.width / 2 + 70.0;
+            todayIndex * 86.w - MediaQuery.of(context).size.width / 2 + 70.w;
         _scrollController.animateTo(offset,
             duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
       }
@@ -103,21 +104,21 @@ class _DatesWidgetState extends State<DatesWidget> {
             }
           },
           child: Container(
-            width: 100,
-            height: 100,
-            margin: EdgeInsets.symmetric(horizontal: 7),
+            width: 100.w,
+            height: 100.h,
+            margin: EdgeInsets.symmetric(horizontal: 7.w),
             decoration: BoxDecoration(
               color: Color.fromRGBO(89, 95, 255, 1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Center(
               child: SizedBox(
-                height: 90,
-                width: 85,
+                height: 90.h,
+                width: 85.w,
                 child: Center(
                   child: AutoSizeText(
                     "Choose date",
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    style: TextStyle(color: Colors.white, fontSize: 17.sp),
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     overflow: TextOverflow.visible,
@@ -140,12 +141,12 @@ class _DatesWidgetState extends State<DatesWidget> {
         widget.onDateSelected(date);
       },
       child: Container(
-        width: 70,
-        height: 100,
-        margin: EdgeInsets.symmetric(horizontal: 7),
+        width: 70.w,
+        height: 100.h,
+        margin: EdgeInsets.symmetric(horizontal: 7.h),
         decoration: BoxDecoration(
           color: isSelected ? Colors.white : Color.fromRGBO(89, 95, 255, 1),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -155,7 +156,7 @@ class _DatesWidgetState extends State<DatesWidget> {
               style: TextStyle(
                 color:
                     isSelected ? Color.fromRGBO(89, 95, 255, 1) : Colors.white,
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
             ),
             Text(
@@ -163,7 +164,7 @@ class _DatesWidgetState extends State<DatesWidget> {
               style: TextStyle(
                 color:
                     isSelected ? Color.fromRGBO(89, 95, 255, 1) : Colors.white,
-                fontSize: 18,
+                fontSize: 18.sp,
               ),
             ),
           ],

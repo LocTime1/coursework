@@ -8,6 +8,7 @@ import 'package:coursework/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TasksWidget extends StatefulWidget {
   final DateTime selectedDate;
@@ -280,7 +281,7 @@ class _TaskTileState extends State<TaskTile> {
         Column(
           children: [
             SizedBox(
-              height: 10,
+              height: 10.h,
             ),
             GestureDetector(
               onTap: () async {
@@ -288,36 +289,37 @@ class _TaskTileState extends State<TaskTile> {
               },
               child: task["isCompleted"] == 1
                   ? Container(
-                      width: 30,
-                      height: 30,
+                      width: 30.w,
+                      height: 30.h,
                       decoration: BoxDecoration(
                         color: Color(task['color']),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.check, color: Colors.white, size: 23),
+                      child:
+                          Icon(Icons.check, color: Colors.white, size: 23.sp),
                     )
                   : Container(
-                      width: 30,
-                      height: 30,
+                      width: 30.w,
+                      height: 30.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: Color(task['color']),
-                          width: 7,
+                          width: 7.w,
                         ),
                       ),
                     ),
             ),
             SizedBox(
-              height: 6,
+              height: 6.h,
             ),
             Container(
-              width: 2,
-              height: 100,
+              width: 2.w,
+              height: 100.h,
               decoration: BoxDecoration(
                 border: Border(
                   left: BorderSide(
-                    width: 2,
+                    width: 2.w,
                     style: BorderStyle.none,
                   ),
                 ),
@@ -327,52 +329,52 @@ class _TaskTileState extends State<TaskTile> {
               ),
             ),
             SizedBox(
-              height: 15,
+              height: 15.h,
             )
           ],
         ),
         Container(
-          width: 315,
-          height: 145,
+          width: 315.w,
+          height: 145.h,
           decoration: BoxDecoration(
               color: Color(task['color']).withOpacity(0.5),
-              borderRadius: BorderRadius.circular(25)),
+              borderRadius: BorderRadius.circular(25.r)),
           child: Row(
             children: [
               SizedBox(
-                width: 20,
+                width: 20.w,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 15,
+                    height: 15.h,
                   ),
                   Text(
                     "${task['deadline']}",
                     style: TextStyle(
-                        color: Color.fromRGBO(75, 76, 90, 1), fontSize: 17),
+                        color: Color.fromRGBO(75, 76, 90, 1), fontSize: 17.sp),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 15.h,
                   ),
                   SizedBox(
-                    height: 35,
-                    width: 290,
+                    height: 35.h,
+                    width: 290.w,
                     child: AutoSizeText(
                       task['title'],
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 24.sp, fontWeight: FontWeight.bold),
                       maxLines: 2,
                       minFontSize: 12,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   SizedBox(
-                    height: 5,
+                    height: 5.h,
                   ),
                   Container(
-                    width: 270,
+                    width: 270.w,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -381,11 +383,11 @@ class _TaskTileState extends State<TaskTile> {
                               _deleteTask();
                             },
                             child: Container(
-                                height: 40,
-                                width: 70,
+                                height: 40.h,
+                                width: 70.w,
                                 decoration: BoxDecoration(
                                     color: Color(task['color']),
-                                    borderRadius: BorderRadius.circular(35)),
+                                    borderRadius: BorderRadius.circular(35.sp)),
                                 child: Center(
                                   child: Text(
                                     "Delete",
@@ -415,8 +417,8 @@ class DashedLinePainter extends CustomPainter {
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
-    double dashHeight = 5, dashSpace = 5;
-    double startY = 0;
+    double dashHeight = 5.h, dashSpace = 5.h;
+    double startY = 0.h;
 
     while (startY < size.height) {
       canvas.drawLine(Offset(0, startY), Offset(0, startY + dashHeight), paint);

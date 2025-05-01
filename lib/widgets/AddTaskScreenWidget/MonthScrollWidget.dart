@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MonthScrollWidget extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _MonthScrollWidgetState extends State<MonthScrollWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         double offset =
-            todayIndex * 150.0 - MediaQuery.of(context).size.width / 2 + 75.0;
+            todayIndex * 150.w - MediaQuery.of(context).size.width / 2 + 75.w;
         _scrollController.animateTo(offset,
             duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
       }
@@ -53,14 +54,14 @@ class _MonthScrollWidgetState extends State<MonthScrollWidget> {
   Widget _buildContainer(String month, DateTime currentDate) {
     bool isMonthNow = DateFormat('MMM yyyy').format(currentDate) == month;
     return Container(
-      width: 100,
-      height: 130,
-      margin: EdgeInsets.symmetric(horizontal: 25),
+      width: 100.w,
+      height: 130.h,
+      margin: EdgeInsets.symmetric(horizontal: 25.h),
       child: Center(
         child: Text(
           month,
           style: TextStyle(
-              fontSize: 22,
+              fontSize: 22.sp,
               color: isMonthNow ? Colors.black : Colors.grey,
               fontWeight: FontWeight.bold),
         ),

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChooseDatesWidget extends StatefulWidget {
   final Function(DateTime) onDateSelected;
@@ -43,7 +44,7 @@ class _ChooseDatesWidgetState extends State<ChooseDatesWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         double offset =
-            choosenIndex * 86.0 - MediaQuery.of(context).size.width / 2 + 70.0;
+            choosenIndex * 86.w - MediaQuery.of(context).size.width / 2 + 70.w;
         _scrollController.animateTo(offset,
             duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
       }
@@ -80,14 +81,14 @@ class _ChooseDatesWidgetState extends State<ChooseDatesWidget> {
           widget.onDateSelected(date);
         },
         child: Container(
-          width: 70,
-          height: 100,
-          margin: EdgeInsets.symmetric(horizontal: 7),
+          width: 70.w,
+          height: 100.h,
+          margin: EdgeInsets.symmetric(horizontal: 7.h),
           decoration: BoxDecoration(
             color: isChoose
                 ? Color.fromRGBO(89, 95, 255, 1)
                 : Color.fromRGBO(242, 242, 242, 1),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -96,14 +97,14 @@ class _ChooseDatesWidgetState extends State<ChooseDatesWidget> {
                 DateFormat('E').format(date).toUpperCase(),
                 style: TextStyle(
                   color: isChoose ? Colors.white : Colors.black,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
               Text(
                 DateFormat('d').format(date),
                 style: TextStyle(
                   color: isChoose ? Colors.white : Colors.black,
-                  fontSize: 18,
+                  fontSize: 18.sp,
                 ),
               ),
             ],

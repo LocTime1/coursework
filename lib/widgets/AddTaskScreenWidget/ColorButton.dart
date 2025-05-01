@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, use_super_parameters, library_private_types_in_public_api, prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ColorPickerButton extends StatefulWidget {
   final Color color;
@@ -24,13 +25,13 @@ class _ColorPickerButtonState extends State<ColorPickerButton> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        width: 40,
-        height: 40,
+        width: 40.w,
+        height: 40.h,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: widget.color,
           border: widget.isSelected
-              ? Border.all(color: Color.fromRGBO(64, 67, 201, 1), width: 5)
+              ? Border.all(color: Color.fromRGBO(64, 67, 201, 1), width: 5.w)
               : null,
         ),
       ),
@@ -67,7 +68,7 @@ class _ColorPickerDemoState extends State<ColorPickerDemo> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: colors.map((color) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.w),
           child: ColorPickerButton(
             color: color,
             isSelected: _selectedColor == color,

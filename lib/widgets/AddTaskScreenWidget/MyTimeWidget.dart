@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyTimeWidget extends StatefulWidget {
   final Function(TimeOfDay) onTimeSelected;
@@ -29,11 +30,11 @@ class _MyTimeWidgetState extends State<MyTimeWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Deadline",
-            style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold)),
+            style: TextStyle(fontSize: 27.sp, fontWeight: FontWeight.bold)),
         Form(
             key: _formKey,
             child: SizedBox(
-              width: 150,
+              width: 150.w,
               child: TextFormField(
                 decoration: InputDecoration(
                   hintText: selectedTime != null
@@ -43,16 +44,16 @@ class _MyTimeWidgetState extends State<MyTimeWidget> {
                   filled: true,
                   fillColor: Color.fromRGBO(242, 242, 242, 1),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                     borderSide: BorderSide.none,
                   ),
                   isDense: true,
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
                   suffixIcon: IconButton(
                     icon: Icon(
                       Icons.access_time,
-                      size: 30,
+                      size: 30.sp,
                     ),
                     onPressed: () async {
                       TimeOfDay? picked = await showTimePicker(

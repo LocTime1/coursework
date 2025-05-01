@@ -3,8 +3,8 @@
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:coursework/addTaskSreen.dart';
 import 'package:coursework/database.dart';
+import 'package:coursework/screens/AddTaskSreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -45,7 +45,7 @@ class TasksWidgetState extends State<TasksWidget> {
           taskDate.day == widget.selectedDate.day;
     }).toList();
     for (var task in filtered) {
-      log("${task}");
+      log("$task");
     }
     setState(() {
       tasks = filtered;
@@ -205,7 +205,7 @@ class TasksWidgetState extends State<TasksWidget> {
     }
     log("${activeTasks.length}");
     for (var a in tasks) {
-      log("${a}");
+      log("$a");
     }
     return Container(
       height: MediaQuery.of(context).size.height * 0.65,

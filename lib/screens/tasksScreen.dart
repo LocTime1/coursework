@@ -1,14 +1,14 @@
 import 'package:coursework/screens/notesScreen.dart';
 import 'package:coursework/widgets/TasksScreen/anotherDatesWidget.dart';
+import 'package:coursework/widgets/TasksScreen/datesWidget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../addTaskSreen.dart';
+import 'package:coursework/screens/AddTaskSreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../widgets/datesWidget.dart';
-import '../widgets/TasksScreen/addButtonWidget.dart';
-import '../widgets/TasksScreen/menuButtonWidget.dart';
-import '../widgets/TasksScreen/tasksWidget.dart';
+import 'package:coursework/widgets/TasksScreen/addButtonWidget.dart';
+import 'package:coursework/widgets/TasksScreen/menuButtonWidget.dart';
+import 'package:coursework/widgets/TasksScreen/tasksWidget.dart';
 
 
 class TasksScreen extends StatefulWidget {

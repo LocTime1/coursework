@@ -90,7 +90,7 @@ class _NotesScreenState extends State<NotesScreen> {
                 onTap: () {
                   Scaffold.of(context).openDrawer();
                 },
-                child: Container(
+                child: SizedBox(
                   width: 60,
                   height: 60,
                   child: const MenuButton(),
@@ -126,7 +126,7 @@ class _NotesScreenState extends State<NotesScreen> {
         Positioned(
             top: 200,
             left: MediaQuery.of(context).size.width * 0.05,
-            child: Container(
+            child: SizedBox(
                 height: 700,
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: MasonryGridView.count(

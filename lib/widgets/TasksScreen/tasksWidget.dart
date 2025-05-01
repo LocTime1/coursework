@@ -44,11 +44,15 @@ class TasksWidgetState extends State<TasksWidget> {
           taskDate.month == widget.selectedDate.month &&
           taskDate.day == widget.selectedDate.day;
     }).toList();
-
+    for (var task in filtered) {
+      log("${task}");
+    }
     setState(() {
       tasks = filtered;
-      activeTasks = filtered.where((t) => t['isCompleted'] == 0).toList();
-      completedTasks = filtered.where((t) => t['isCompleted'] == 1).toList();
+      activeTasks =
+          filtered.where((t) => '${t['isCompleted']}' == '0').toList();
+      completedTasks =
+          filtered.where((t) => '${t['isCompleted']}' == '1').toList();
     });
   }
 
@@ -71,15 +75,15 @@ class TasksWidgetState extends State<TasksWidget> {
   Widget build(BuildContext context) {
     if (tasks.isEmpty) {
       return Container(
-        padding: EdgeInsets.only(top: 100),
-        height: 500,
+        padding: EdgeInsets.only(top: 100.h),
+        height: 500.h,
         width: MediaQuery.of(context).size.width,
         child: Column(children: [
           Text(
             "Add something to do!",
-            style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 33.sp, fontWeight: FontWeight.bold),
           ),
-          Lottie.asset("assets/animations/empty_animation.json", height: 200),
+          Lottie.asset("assets/animations/empty_animation.json", height: 200.h),
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -94,21 +98,21 @@ class TasksWidgetState extends State<TasksWidget> {
               });
             },
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
               decoration: BoxDecoration(
                 color: Color.fromRGBO(64, 67, 201, 1),
-                borderRadius: BorderRadius.circular(40),
+                borderRadius: BorderRadius.circular(40.r),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.add_circle, color: Colors.white),
-                  SizedBox(width: 10),
+                  SizedBox(width: 10.h),
                   Text(
                     "Add another task",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -133,14 +137,15 @@ class TasksWidgetState extends State<TasksWidget> {
               children: [
                 LottieBuilder.asset(
                   "assets/animations/first_animation.json",
-                  height: 170,
+                  height: 170.h,
                   repeat: false,
                 ),
                 Text(
                   "All tasks are done!",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                  style:
+                      TextStyle(fontSize: 25.sp, fontWeight: FontWeight.w600),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -155,21 +160,22 @@ class TasksWidgetState extends State<TasksWidget> {
                     });
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(64, 67, 201, 1),
-                      borderRadius: BorderRadius.circular(40),
+                      borderRadius: BorderRadius.circular(40.r),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.add_circle, color: Colors.white),
-                        SizedBox(width: 10),
+                        SizedBox(width: 10.w),
                         Text(
                           "Add another task",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -180,13 +186,13 @@ class TasksWidgetState extends State<TasksWidget> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15),
+              padding: EdgeInsets.only(top: 15.h),
               child: ExpansionTile(
                 key: PageStorageKey(widget.selectedDate.toIso8601String()),
                 title: Text(
                     "Completed tasks ${completedTasks.length}/${activeTasks.length + completedTasks.length}",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 25.sp)),
                 children: completedTasks
                     .map((task) =>
                         TaskTile(task: task, onTaskChanged: loadTasks))
@@ -197,30 +203,34 @@ class TasksWidgetState extends State<TasksWidget> {
         ),
       );
     }
-
+    log("${activeTasks.length}");
+    for (var a in tasks) {
+      log("${a}");
+    }
     return Container(
       height: MediaQuery.of(context).size.height * 0.65,
       child: ListView(
-        padding: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(top: 10.h),
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
             child: Text(
               isToday
                   ? "Today's tasks:"
                   : "Tasks for ${DateFormat('MMMM d').format(widget.selectedDate)}:",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
             ),
           ),
           ...activeTasks
               .map((task) => TaskTile(task: task, onTaskChanged: loadTasks)),
           Padding(
-            padding: const EdgeInsets.only(top: 15),
+            padding: EdgeInsets.only(top: 15.h),
             child: ExpansionTile(
               key: PageStorageKey(widget.selectedDate.toIso8601String()),
               title: Text(
                   "Completed tasks ${completedTasks.length}/${activeTasks.length + completedTasks.length}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 25.sp)),
               children: completedTasks
                   .map((task) => TaskTile(task: task, onTaskChanged: loadTasks))
                   .toList(),

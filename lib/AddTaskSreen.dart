@@ -38,7 +38,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       'date': selectedDate!.toIso8601String(),
       'deadline': _selectedTime!.format(context),
       'color': _selectedColor!.value,
-      'completed': 0,
+      'isCompleted': 0,
     });
     Navigator.pop(context);
   }

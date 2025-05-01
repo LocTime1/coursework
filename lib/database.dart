@@ -23,7 +23,7 @@ class MyDatabase {
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE tasks(
@@ -32,14 +32,14 @@ class MyDatabase {
             date TEXT,
             deadline TEXT,
             color INTEGER,
-            completed INTEGER DEFAULT 0
+            isCompleted INTEGER DEFAULT 0
           )
         ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion <= 2) {
+        if (oldVersion < 4) {
           await db.execute(
-              'ALTER TABLE tasks ADD COLUMN completed INTEGER DEFAULT 0');
+              'ALTER TABLE tasks ADD COLUMN isCompleted INTEGER DEFAULT 0');
         }
       },
     );

@@ -3,14 +3,14 @@
 import 'dart:developer';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'database.dart';
-import 'widgets/AddTaskScreenWidget/ChooseDateWidget.dart';
-import 'widgets/AddTaskScreenWidget/ColorButton.dart';
+import '../database.dart';
+import '../widgets/AddTaskScreenWidget/ChooseDateWidget.dart';
+import '../widgets/AddTaskScreenWidget/ColorButton.dart';
 import 'package:flutter/material.dart';
-import 'widgets/AddTaskScreenWidget/AddTaskName.dart';
-import 'widgets/AddTaskScreenWidget/MonthScrollWidget.dart';
-import 'widgets/AddTaskScreenWidget/MyTimeWidget.dart';
-import 'widgets/AddTaskScreenWidget/backButtonWidget.dart';
+import '../widgets/AddTaskScreenWidget/AddTaskName.dart';
+import '../widgets/AddTaskScreenWidget/MonthScrollWidget.dart';
+import '../widgets/AddTaskScreenWidget/MyTimeWidget.dart';
+import '../widgets/AddTaskScreenWidget/backButtonWidget.dart';
 
 class AddTaskScreen extends StatefulWidget {
   final VoidCallback refreshTasks;

@@ -3,7 +3,7 @@
 import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:coursework/main.dart';
+import 'package:coursework/screens/tasksScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -81,7 +81,7 @@ class _DatesWidgetState extends State<DatesWidget> {
 
   Widget _buildContainer(dynamic date) {
     bool isCalendarBtn = date.year == 0 && date.month == 1 && date.day == 1;
-    log("${date.year} ${date.month} ${date.day}      ${isCalendarBtn}");
+    log("${date.year} ${date.month} ${date.day} ${isCalendarBtn}");
     if (isCalendarBtn) {
       return GestureDetector(
           onTap: () async {
@@ -96,7 +96,7 @@ class _DatesWidgetState extends State<DatesWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(
+                  builder: (context) => TasksScreen(
                     isAnotherDate: picked,
                   ),
                 ),

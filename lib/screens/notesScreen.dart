@@ -2,10 +2,10 @@
 
 import 'dart:math';
 
-import 'package:coursework/main.dart';
+import 'package:coursework/screens/tasksScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'widgets/TasksScreen/menuButtonWidget.dart';
+import '../widgets/TasksScreen/menuButtonWidget.dart';
 
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});
@@ -212,7 +212,7 @@ class _NotesScreenState extends State<NotesScreen> {
             if (ind == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => TasksScreen()),
               );
             }
           },

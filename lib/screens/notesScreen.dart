@@ -18,6 +18,8 @@ class NotesScreen extends StatefulWidget {
 
 class _NotesScreenState extends State<NotesScreen> {
   List<Map<String, dynamic>> notes = [];
+  int? selectedNoteId;
+  Offset? selectedNoteOffset;
 
   @override
   void initState() {
@@ -30,7 +32,6 @@ class _NotesScreenState extends State<NotesScreen> {
     log("${data}");
     setState(() {
       notes = data;
-      
     });
   }
 
@@ -85,7 +86,7 @@ class _NotesScreenState extends State<NotesScreen> {
                   context,
                   MaterialPageRoute(builder: (context) => AddNoteScreen()),
                 );
-                loadNotes(); 
+                loadNotes();
               },
               child: Container(
                 width: 50,
@@ -111,7 +112,7 @@ class _NotesScreenState extends State<NotesScreen> {
             ),
           ),
           Positioned(
-            top: 200,
+            top: 230,
             left: MediaQuery.of(context).size.width * 0.05,
             child: SizedBox(
               height: 700,
@@ -126,8 +127,41 @@ class _NotesScreenState extends State<NotesScreen> {
                   final color = Color(note['color'] ?? Colors.white);
 
                   return GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddNoteScreen()));
+                    onLongPressStart: (details) {
+                      final tapPosition = details.globalPosition;
+                      final screenSize = MediaQuery.of(context).size;
+
+                      showMenu<int>(
+                        context: context,
+                        position: RelativeRect.fromLTRB(
+                          tapPosition.dx,
+                          tapPosition.dy,
+                          screenSize.width - tapPosition.dx,
+                          screenSize.height - tapPosition.dy,
+                        ),
+                        items: [
+                          PopupMenuItem(
+                            value: 0,
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete, color: Colors.red),
+                                SizedBox(width: 8),
+                                Text('Удалить',
+                                    style: TextStyle(color: Colors.red)),
+                              ],
+                            ),
+                          ),
+                        ],
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ).then((value) {
+                        if (value == 0) {
+                          MyDatabase().deleteNote(note['id']);
+                          loadNotes();
+                        }
+                      });
                     },
                     child: Container(
                       decoration: BoxDecoration(

@@ -124,4 +124,10 @@ class MyDatabase {
     final db = await database;
     return await db.query('notes', orderBy: 'lastEditedAt DESC');
   }
+
+  Future<int> deleteNote(int id) async {
+  final db = await database;
+  return await db.delete('notes', where: 'id = ?', whereArgs: [id]);
+}
+
 }

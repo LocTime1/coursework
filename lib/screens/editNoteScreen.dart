@@ -161,26 +161,55 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                         borderRadius: BorderRadius.circular(15.r),
                       ),
                       child: Icon(Icons.arrow_back_ios_new,
-                          color: Color(noteColor)),
+                          color: Color(Color.fromRGBO(128, 200, 194, 1).value)),
                     ),
                   ),
-                  SizedBox(width: 16.w),
-                  IconButton(
-                    icon: Icon(Icons.text_fields, color: Colors.white),
-                    onPressed: () {
+                  SizedBox(width: 10.w),
+                  GestureDetector(
+                    onTap: () {
                       setState(() {
                         blocks.add(NoteBlock.text());
-                        blocks.last.controller!.addListener(_saveAll);
+                        blocks.last.controller!.addListener(() => _saveAll());
                       });
                     },
+                    child: Container(
+                      width: 50.w,
+                      height: 50.h,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15.r),
+                      ),
+                      child: Icon(Icons.text_fields,
+                          color: Color(Color.fromRGBO(128, 200, 194, 1).value)),
+                    ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.image, color: Colors.white),
-                    onPressed: () => _insertImage(blocks.length - 1),
+                  SizedBox(width: 10.w),
+                  GestureDetector(
+                    onTap: () => _insertImage(blocks.length - 1),
+                    child: Container(
+                      width: 50.w,
+                      height: 50.h,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15.r),
+                      ),
+                      child: Icon(Icons.image,
+                          color: Color(Color.fromRGBO(128, 200, 194, 1).value)),
+                    ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.mic, color: Colors.white),
-                    onPressed: () => _insertAudio(blocks.length - 1),
+                  SizedBox(width: 10.w),
+                  GestureDetector(
+                    onTap: () => _insertAudio(blocks.length - 1),
+                    child: Container(
+                      width: 50.w,
+                      height: 50.h,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15.r),
+                      ),
+                      child: Icon(Icons.mic,
+                          color: Color(Color.fromRGBO(128, 200, 194, 1).value)),
+                    ),
                   ),
                 ]),
               ),
@@ -226,7 +255,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                           Expanded(
                             child: Text(
                               b.file!.path.split('/').last,
-                              style: TextStyle(fontSize: 16.sp),
+                              style: TextStyle(fontSize: 17.sp),
                             ),
                           ),
                         ]),

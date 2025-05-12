@@ -189,7 +189,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        top: 50.h, // Отступ сверху
+        top: 50.h,
         left: 41.1.w,
         width: 330.w,
         child: Material(

@@ -285,7 +285,7 @@ class _NotesScreenState extends State<NotesScreen> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: IconButton(
-          icon: Icon(icon, size: 30, color: Colors.white),
+          icon: Icon(icon, size: 30, color: Colors.white10),
           onPressed: () {
             if (ind == 1) {
               Navigator.push(

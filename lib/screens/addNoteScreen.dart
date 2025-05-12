@@ -102,7 +102,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       body: Column(
         children: [
           Container(
-            height: 100.h,
+            height: 130.h,
             width: double.infinity,
             color: Color(color),
             child: SafeArea(
@@ -123,23 +123,49 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             Icon(Icons.arrow_back_ios_new, color: Color(color)),
                       ),
                     ),
-                    SizedBox(width: 16.w),
-                    IconButton(
-                      icon: Icon(Icons.text_fields, color: Colors.white),
-                      onPressed: () {
+                    SizedBox(width: 10.w),
+                    GestureDetector(
+                      onTap: () {
                         setState(() {
                           blocks.add(NoteBlock.text());
                           blocks.last.controller!.addListener(() => _saveAll());
                         });
                       },
+                      child: Container(
+                        width: 50.w,
+                        height: 50.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Icon(Icons.text_fields, color: Color(color)),
+                      ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.image, color: Colors.white),
-                      onPressed: () => _insertImage(blocks.length - 1),
+                    SizedBox(width: 10.w),
+                    GestureDetector(
+                      onTap: () => _insertImage(blocks.length - 1),
+                      child: Container(
+                        width: 50.w,
+                        height: 50.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Icon(Icons.image, color: Color(color)),
+                      ),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.mic, color: Colors.white),
-                      onPressed: () => _insertAudio(blocks.length - 1),
+                    SizedBox(width: 10.w),
+                    GestureDetector(
+                      onTap: () => _insertAudio(blocks.length - 1),
+                      child: Container(
+                        width: 50.w,
+                        height: 50.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Icon(Icons.mic, color: Color(color)),
+                      ),
                     ),
                   ],
                 ),
@@ -149,7 +175,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
           Expanded(
             child: Container(
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: ListView.builder(
                 itemCount: blocks.length,
                 itemBuilder: (ctx, i) {

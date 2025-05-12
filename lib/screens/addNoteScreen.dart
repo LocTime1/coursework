@@ -101,7 +101,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     return Scaffold(
       body: Column(
         children: [
-          // ======= HEADER with buttons =======
           Container(
             height: 100.h,
             width: double.infinity,
@@ -111,7 +110,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Row(
                   children: [
-                    // ← Back
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: Container(
@@ -125,28 +123,20 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             Icon(Icons.arrow_back_ios_new, color: Color(color)),
                       ),
                     ),
-
                     SizedBox(width: 16.w),
-
-                    // Текст
                     IconButton(
                       icon: Icon(Icons.text_fields, color: Colors.white),
                       onPressed: () {
-                        final idx = blocks.length - 1;
                         setState(() {
                           blocks.add(NoteBlock.text());
                           blocks.last.controller!.addListener(() => _saveAll());
                         });
                       },
                     ),
-
-                    // Изображение
                     IconButton(
                       icon: Icon(Icons.image, color: Colors.white),
                       onPressed: () => _insertImage(blocks.length - 1),
                     ),
-
-                    // Аудио
                     IconButton(
                       icon: Icon(Icons.mic, color: Colors.white),
                       onPressed: () => _insertAudio(blocks.length - 1),
@@ -156,8 +146,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               ),
             ),
           ),
-
-          // ======= CONTENT =======
           Expanded(
             child: Container(
               color: Colors.white,

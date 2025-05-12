@@ -168,7 +168,6 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                   IconButton(
                     icon: Icon(Icons.text_fields, color: Colors.white),
                     onPressed: () {
-                      final idx = blocks.length - 1;
                       setState(() {
                         blocks.add(NoteBlock.text());
                         blocks.last.controller!.addListener(_saveAll);

@@ -10,6 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../widgets/TasksScreen/menuButtonWidget.dart';
 
+enum BlockType { text, image, audio }
+
+class _Block {
+  final BlockType type;
+  final String data;
+  _Block(this.type, this.data);
+}
+
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});
 
@@ -20,7 +28,6 @@ class NotesScreen extends StatefulWidget {
 class _NotesScreenState extends State<NotesScreen> {
   List<Map<String, dynamic>> notes = [];
   int? selectedNoteId;
-  Offset? selectedNoteOffset;
 
   @override
   void initState() {
@@ -30,10 +37,35 @@ class _NotesScreenState extends State<NotesScreen> {
 
   Future<void> loadNotes() async {
     final data = await MyDatabase().getNotes();
-    log("${data}");
-    setState(() {
-      notes = data;
-    });
+    log("$data");
+    setState(() => notes = data);
+  }
+
+  List<_Block> _parseBlocks(String text) {
+    final regex = RegExp(r'\[image:(.*?)\]|\[audio:(.*?)\]');
+    final matches = regex.allMatches(text).toList();
+    final parts = text.split(regex);
+    final blocks = <_Block>[];
+
+    int matchIndex = 0;
+    for (int i = 0; i < parts.length; i++) {
+      final part = parts[i];
+      if (part.isNotEmpty) {
+        blocks.add(_Block(BlockType.text, part));
+      }
+      if (matchIndex < matches.length) {
+        final m = matches[matchIndex];
+        final img = m.group(1);
+        final aud = m.group(2);
+        if (img != null) {
+          blocks.add(_Block(BlockType.image, img));
+        } else if (aud != null) {
+          blocks.add(_Block(BlockType.audio, aud));
+        }
+        matchIndex++;
+      }
+    }
+    return blocks;
   }
 
   @override
@@ -47,14 +79,10 @@ class _NotesScreenState extends State<NotesScreen> {
             left: 0,
             right: 0,
             child: Container(
-              width: double.infinity,
               height: MediaQuery.of(context).size.height * 0.77,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
               ),
             ),
           ),
@@ -62,18 +90,13 @@ class _NotesScreenState extends State<NotesScreen> {
             top: 45,
             left: 6,
             child: Builder(
-              builder: (context) => Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  child: SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: const MenuButton(),
-                  ),
+              builder: (ctx) => InkWell(
+                onTap: () => Scaffold.of(ctx).openDrawer(),
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: const MenuButton(),
                 ),
               ),
             ),
@@ -85,7 +108,7 @@ class _NotesScreenState extends State<NotesScreen> {
               onTap: () async {
                 await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddNoteScreen()),
+                  MaterialPageRoute(builder: (_) => const AddNoteScreen()),
                 );
                 loadNotes();
               },
@@ -96,11 +119,8 @@ class _NotesScreenState extends State<NotesScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Icon(
-                  Icons.add,
-                  color: Color.fromRGBO(128, 200, 194, 1),
-                  size: 35,
-                ),
+                child: Icon(Icons.add,
+                    color: Color.fromRGBO(128, 200, 194, 1), size: 35),
               ),
             ),
           ),
@@ -108,112 +128,130 @@ class _NotesScreenState extends State<NotesScreen> {
             top: 110,
             left: 65,
             child: Text(
-              " Your notes",
+              "Your notes",
               style: TextStyle(color: Colors.white, fontSize: 53),
             ),
           ),
           Positioned(
             top: 230,
             left: MediaQuery.of(context).size.width * 0.05,
-            child: SizedBox(
-              height: 700,
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: MasonryGridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  final note = notes[index];
-                  final color = Color(note['color'] ?? Colors.white);
+            right: MediaQuery.of(context).size.width * 0.05,
+            bottom: 0,
+            child: MasonryGridView.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              itemCount: notes.length,
+              itemBuilder: (ctx, index) {
+                final note = notes[index];
+                final bgColor = Color(note['color'] ?? Colors.white.value);
 
-                  return GestureDetector(
-                    onLongPressStart: (details) {
-                      final tapPosition = details.globalPosition;
-                      final screenSize = MediaQuery.of(context).size;
+                final blocks = _parseBlocks(note['text'] as String? ?? '');
 
-                      showMenu<int>(
-                        context: context,
-                        position: RelativeRect.fromLTRB(
-                          tapPosition.dx,
-                          tapPosition.dy,
-                          screenSize.width - tapPosition.dx,
-                          screenSize.height - tapPosition.dy,
-                        ),
-                        items: [
-                          PopupMenuItem(
-                            value: 0,
-                            child: Row(
-                              children: [
-                                Icon(Icons.delete, color: Colors.red),
-                                SizedBox(width: 8),
-                                Text('Удалить',
-                                    style: TextStyle(color: Colors.red)),
-                              ],
-                            ),
-                          ),
+                final preview = <Widget>[];
+                for (var b in blocks) {
+                  if (preview.length >= 7) break;
+                  switch (b.type) {
+                    case BlockType.text:
+                      preview.add(Text(
+                        b.data.trim(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ));
+                      break;
+                    case BlockType.image:
+                      preview.add(Row(
+                        children: [
+                          Icon(Icons.image, size: 20),
+                          SizedBox(width: 4),
+                          Text("Image",
+                              style: TextStyle(
+                                  fontSize: 14, fontStyle: FontStyle.italic)),
                         ],
-                        elevation: 8,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                      ));
+                      break;
+                    case BlockType.audio:
+                      preview.add(Row(
+                        children: [
+                          Icon(Icons.audiotrack, size: 20),
+                          SizedBox(width: 4),
+                          Text("Audio",
+                              style: TextStyle(
+                                  fontSize: 14, fontStyle: FontStyle.italic)),
+                        ],
+                      ));
+                      break;
+                  }
+                  preview.add(SizedBox(height: 6));
+                }
+
+                final date = note['createdAt'] as String?;
+                preview.add(Text(
+                  date != null ? date.split('T').first : '',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+                ));
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      ctx,
+                      MaterialPageRoute(
+                          builder: (_) => EditNoteScreen(note: note)),
+                    );
+                  },
+                  onLongPressStart: (d) {
+                    final tap = d.globalPosition;
+                    final sz = MediaQuery.of(ctx).size;
+                    showMenu<int>(
+                      context: ctx,
+                      position: RelativeRect.fromLTRB(tap.dx, tap.dy,
+                          sz.width - tap.dx, sz.height - tap.dy),
+                      items: [
+                        PopupMenuItem(
+                          value: 0,
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete, color: Colors.red),
+                              SizedBox(width: 8),
+                              Text('Удалить',
+                                  style: TextStyle(color: Colors.red)),
+                            ],
+                          ),
                         ),
-                      ).then((value) {
-                        if (value == 0) {
-                          MyDatabase().deleteNote(note['id']);
-                          loadNotes();
-                        }
-                      });
-                    },
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => EditNoteScreen(note: note),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: color.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
+                      ],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      elevation: 8,
+                    ).then((v) {
+                      if (v == 0) {
+                        MyDatabase().deleteNote(note['id']);
+                        loadNotes();
+                      }
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: bgColor.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
                             color: Colors.black12,
                             blurRadius: 8,
-                            offset: Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if ((note['text'] ?? '').isNotEmpty)
-                            Text(
-                              note['text'],
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          SizedBox(height: 6),
-                          if (note['createdAt'] != null)
-                            Text(
-                              note['createdAt'].toString().split('T').first,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[700],
-                              ),
-                            ),
-                        ],
-                      ),
+                            offset: Offset(2, 2)),
+                      ],
                     ),
-                  );
-                },
-              ),
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: preview,
+                    ),
+                  ),
+                );
+              },
             ),
-          )
+          ),
         ],
       ),
       drawer: SizedBox(
@@ -247,19 +285,15 @@ class _NotesScreenState extends State<NotesScreen> {
           borderRadius: BorderRadius.circular(12),
         ),
         child: IconButton(
+          icon: Icon(icon, size: 30, color: Colors.white),
           onPressed: () {
             if (ind == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => TasksScreen()),
+                MaterialPageRoute(builder: (_) => TasksScreen()),
               );
             }
           },
-          icon: Icon(
-            icon,
-            size: 30,
-            color: Colors.white,
-          ),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:coursework/database.dart';
 import 'package:coursework/screens/addNoteScreen.dart';
+import 'package:coursework/screens/editNoteScreen.dart';
 import 'package:coursework/screens/tasksScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -162,6 +163,14 @@ class _NotesScreenState extends State<NotesScreen> {
                           loadNotes();
                         }
                       });
+                    },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EditNoteScreen(note: note),
+                        ),
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(
